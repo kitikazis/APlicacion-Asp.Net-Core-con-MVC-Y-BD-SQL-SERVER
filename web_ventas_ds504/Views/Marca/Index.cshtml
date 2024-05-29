@@ -1,0 +1,53 @@
+﻿@model IEnumerable<web_ventas_ds504.Models.Marca>
+
+@{
+    ViewData["Title"] = "Listado de Marcas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Listado de Marcas</h1>
+<hr />
+
+<div class="container">
+    <div class="row">
+        <a asp-controller="Marca" asp-action="Create" class="btn btn-success">
+            <i class="fas fa-user-plus"></i> Agregar Marca
+        </a>
+    </div>
+
+    <div class="row mt-3">
+        @if (Model.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(marca => marca.codigo_marca)</th>
+                        <th>@Html.DisplayNameFor(marca => marca.marca)</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var marca in Model)
+                    {
+                        <tr>
+                            <td>@marca.codigo_marca</td>
+                            <td>@marca.marca</td>
+                            <td>
+                                <a asp-controller="Marca" asp-action="Edit" asp-route-id="@marca.codigo_marca" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-pencil-alt"></i> Editar
+                                </a>
+                                <a asp-controller="Marca" asp-action="Delete" asp-route-id="@marca.codigo_marca" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i> Borrar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No existen registros</p>
+        }
+    </div>
+</div>

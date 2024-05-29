@@ -1,0 +1,53 @@
+﻿@model IEnumerable<web_ventas_ds504.Models.Categoria>
+
+@{
+    ViewData["Title"] = "Listado de Categorías";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Listado de Categorías</h1>
+<hr />
+
+<div class="container">
+    <div class="row">
+        <a asp-controller="Categoria" asp-action="Create" class="btn btn-success">
+            <i class="fas fa-user-plus"></i> Agregar Categoria
+        </a>
+    </div>
+
+    <div class="row mt-3">
+        @if (Model.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(categoria => categoria.codigo_categoria)</th>
+                        <th>@Html.DisplayNameFor(categoria => categoria.categoria)</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var categoria in Model)
+                    {
+                        <tr>
+                            <td>@categoria.codigo_categoria</td>
+                            <td>@categoria.categoria</td>
+                            <td>
+                                <a asp-controller="Categoria" asp-action="Edit" asp-route-id="@categoria.codigo_categoria" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-pencil-alt"></i> Editar
+                                </a>
+                                <a asp-controller="Categoria" asp-action="Delete" asp-route-id="@categoria.codigo_categoria" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i> Borrar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No existen registros</p>
+        }
+    </div>
+</div>

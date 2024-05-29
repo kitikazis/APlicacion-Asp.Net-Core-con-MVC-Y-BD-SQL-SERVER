@@ -1,0 +1,59 @@
+﻿@model IEnumerable<web_ventas_ds504.Models.Producto>
+
+@{
+    ViewData["Title"] = "Listado de Productos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Listado de Productos</h1>
+<hr />
+
+<div class="container">
+    <div class="row">
+        <a asp-controller="Producto" asp-action="Create" class="btn btn-success">
+            <i class="fas fa-user-plus"></i> Agregar Producto
+        </a>
+    </div>
+
+    <div class="row mt-3">
+        @if (Model.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(producto => producto.codigo_producto)</th>
+                        <th>@Html.DisplayNameFor(producto => producto.producto)</th>
+                        <th>@Html.DisplayNameFor(producto => producto.stock_disponible)</th>
+                        <th>@Html.DisplayNameFor(producto => producto.costo)</th>
+                        <th>@Html.DisplayNameFor(producto => producto.ganancia)</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var producto in Model)
+                    {
+                        <tr>
+                            <td>@producto.codigo_producto</td>
+                            <td>@producto.producto</td>
+                            <td>@producto.stock_disponible</td>
+                            <td>@String.Format("{0:C}", producto.costo)</td>
+                            <td>@producto.ganancia</td>
+                            <td>
+                                <a asp-controller="Producto" asp-action="Edit" asp-route-id="@producto.codigo_producto" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-pencil-alt"></i> Editar
+                                </a>
+                                <a asp-controller="Producto" asp-action="Delete" asp-route-id="@producto.codigo_producto" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i> Borrar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No existen registros</p>
+        }
+    </div>
+</div>

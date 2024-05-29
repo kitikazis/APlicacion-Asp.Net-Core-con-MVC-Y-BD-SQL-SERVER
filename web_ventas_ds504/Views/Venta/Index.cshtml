@@ -1,0 +1,59 @@
+﻿@model IEnumerable<web_ventas_ds504.Models.Venta>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Listado de Ventas</h1>
+<hr />
+
+<div class="container">
+    <div class="row">
+        <a asp-controller="Venta" asp-action="Create" class="btn btn-success">
+            <i class="fas fa-user-plus"></i> Agregar Venta
+        </a>
+    </div>
+
+    <div class="row">
+        @if (Model.Count() > 0)
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td>@Html.DisplayNameFor(venta => venta.codigo_venta)</td>
+                        <td>@Html.DisplayNameFor(venta => venta.fecha)</td>
+                        <td>@Html.DisplayNameFor(venta => venta.venta_codigo_cliente)</td>
+                        <td>@Html.DisplayNameFor(venta => venta.monto)</td>
+                        <td>@Html.DisplayNameFor(venta => venta.igv)</td>
+                        <td>Acciones</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var venta in Model)
+                    {
+                        <tr>
+                            <td>@venta.codigo_venta</td>
+                            <td>@venta.fecha.ToShortDateString()</td>
+                            <td>@venta.venta_codigo_cliente</td>
+                            <td>@venta.monto</td>
+                            <td>@venta.igv</td>
+                            <td>
+                                <a asp-controller="Venta" asp-action="Edit" asp-route-id="@venta.codigo_venta" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-pencil-alt"></i> Editar
+                                </a>
+                                <a asp-controller="Venta" asp-action="Delete" asp-route-id="@venta.codigo_venta" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i> Borrar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No existen registros</p>
+        }
+    </div>
+</div>

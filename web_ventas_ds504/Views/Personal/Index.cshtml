@@ -1,0 +1,244 @@
+﻿@model web_ventas_ds504.Models.Personal
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section EstiloDT {
+    <link rel="stylesheet" href="~/lib/datatables.net/css/jquery.dataTables.min.css" />
+}
+
+<h1><i class="fas fa-university"></i>Listado del Personal</h1>
+<hr/>
+
+<div class="container">
+
+<div class="row mt-3">
+        <table id="tb_personal" class="table table-striped display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(per => per.dni)</th>
+                    <th>@Html.DisplayNameFor(per => per.ap_paterno)</th>
+                    <th>@Html.DisplayNameFor(per => per.ap_materno)</th>
+                    <th>@Html.DisplayNameFor(per => per.nombre)</th>
+                    <th>@Html.DisplayNameFor(per => per.fecha_nacimiento)</th>
+                    <th>@Html.DisplayNameFor(per => per.genero)</th>
+                    <th>@Html.DisplayNameFor(per => per.sueldo)</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                    </tr>
+                
+            </tbody>
+        </table>
+</div>
+</div>
+
+﻿
+
+<div class="modal fade" id="Formulario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form>
+                            <div class="form-group">
+                                <label asp-for="dni" class="control-label"></label>
+                                <input asp-for="dni" class="form-control" />
+                                <span asp-validation-for="dni" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ap_paterno" class="control-label"></label> 
+                                <input asp-for="ap_paterno" class="form-control" />
+                                <span asp-validation-for="ap_paterno" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ap_materno" class="control-label"></label>
+                                <input asp-for="ap_materno" class="form-control" />
+                                <span asp-validation-for="ap_materno" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label_asp-for ="nombre" class="control-label">
+                                    </label> <input asp-for="nombre" class="form-control" />
+                                    <span asp-validation-for="nombre" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="genero" class="control-label"></label>
+                                <select asp-for="genero" class="form-control">
+                                    <option value="">Seleccione género</option>
+                                    <option value="F">Femenino</option>
+                                    <option value="M">Masculino</option>
+                                </select>
+                                <span asp-validation-for="genero" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label_asp-for ="fecha_nacimiento" class="control-label">
+                                    </label> <input asp-for="fecha_nacimiento" class="form-control" />
+                                    <span asp-validation-for="fecha_nacimiento" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="sueldo" class="control-label"></label>
+                                <input asp-for="sueldo" class="form-control" />
+                                <span asp-validation-for="sueldo" class="text-danger"></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn_cerrar" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="far fa-window-close"></i> Cerrar
+                </button>
+                <button type="button" id="btn_grabar" class="btn btn-outline-primary"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/lib/datatables.net/js/dataTables.buttons.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#tb_personal').DataTable({
+                "ajax": {
+                    "url": "@Url.Action("Listar", "Personal")",
+                    "type": "GET",
+                    "dataType": "json"
+                },
+                "columns": [
+                    { "data": "dni" },
+                    { "data": "ap_paterno" },
+                    { "data": "ap_materno" },
+                    { "data": "nombre" },
+                    { "data": "fecha_nacimiento" },
+                    { "data": "genero" },
+                    { "data": "sueldo" },
+                    {
+                        "data": "dni", "render": function (data) {
+                            return "<button class='btn btn-outline-success' type='button' onclick='AbrirRegistro(" + data + ")'><i class='far fa-edit'></i></button> " +
+                                   "<button class='btn btn-outline-danger' type='button' onclick='Eliminar(" + data + ")'><i class='fas fa-trash-alt'></i></button>"
+                        },
+                    }
+                ],
+                "order": [[1, "asc"]],
+                dom: "Bfrtip",
+                buttons: [
+                    {
+                        text: "Registrar Personal",
+                        attr: { class: "btn btn-outline-primary" },
+                        action: function () {
+                            AbrirRegistro("")
+                        }
+                    }
+                ]
+            });
+        });
+
+
+         ﻿
+
+        function AbrirRegistro($dni) {
+            if ($dni != "") {
+                jQuery.ajax({
+                    url: "@Url.Action("Consultar", "Personal")" + "?dni=" + $dni,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        let fn = data.fecha_nacimiento.substring(0, 10);
+
+                        if (data != null) {
+                            $("#dni").attr("readonly", true);
+
+                            $("#dni").val(data.dni);
+                            $("#ap_paterno").val(data.ap_paterno);
+                            $("#ap_materno").val(data.ap_materno);
+                            $("#nombre").val(data.nombre);
+                            $("#genero").val(data.genero);
+                            $("#fecha_nacimiento").val(fn);
+                            $("#sueldo").val(data.sueldo);
+                        }
+                    }
+                });
+                $(".modal-title").text("Editar Personal");
+                $("#btn_grabar").html("<i class='fas fa-save'></i> Guardar Cambios");
+
+            } else {
+                $("#dni").attr("readonly", false);
+
+                $("#dni").val("");
+                $("#ap_paterno").val("");
+                $("#ap_materno").val("");
+                $("#nombre").val("");
+                $("#genero").val("");
+                $("#Fecha_nacimiento").val("");
+                $("#sueldo").val("");
+
+                $(".modal-title").text("Registrar Personal");
+                $("#btn_grabar").html("<i class='fas fa-save'></i> Guardar Datos");
+            }
+            $("#Formulario").modal("show");
+        }
+
+
+        ﻿
+
+        $("#btn_grabar").click(function (e) {
+            let $personal = {
+                "dni": $("#dni").val(),
+                "ap_paterno": $("#ap_paterno").val(),
+                "ap_materno": $("#ap_materno").val(),
+
+                "nombre": $("#nombre").val(),
+                "genero": $("#genero").val(),
+                "fecha_nacimiento": $("#fecha_nacimiento").val(),
+                "sueldo": $("#sueldo").val()
+            };
+            jQuery.ajax({
+                url: "@Url.Action("Grabar", "Personal")",
+                type: "POST",
+                data: JSON.stringify($personal),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8", 
+                success: function (data) {
+                    if (data.resultado) {
+                        $("#tb_personal").DataTable().ajax.reload();
+                        $("#Formulario").modal("hide");
+                    } else {
+                        alert("No fue posible grabar la información");
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        });
+
+
+        function Eliminar($dni) {
+            if (confirm("¿Seguro de eliminar?")) {
+                jQuery.ajax({
+
+                    url: "@Url.Action("Borrar", "Personal")" + "?dni=" + $dni,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.resultado) {
+                            $("#tb_personal").DataTable().ajax.reload();
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\web_ventas_ds504.props" />
+</Project>
